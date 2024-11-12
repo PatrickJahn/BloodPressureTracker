@@ -41,7 +41,7 @@ jobs:
 
       - name: Run Unit and Integration Tests
         run: |
-              echo TODO - RUN TESTS
+             dotnet test
 
   deploy:
     runs-on: ubuntu-latest
