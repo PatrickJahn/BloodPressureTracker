@@ -4,7 +4,7 @@
   "documentation" : { },
   "id" : 1,
   "lastModifiedAgent" : "structurizr-ui",
-  "lastModifiedDate" : "2024-11-05T09:58:03Z",
+  "lastModifiedDate" : "2024-11-12T19:42:34Z",
   "model" : {
     "people" : [ {
       "description" : "A patient who enters blood pressure measurements",
@@ -18,9 +18,6 @@
         "description" : "Enters data",
         "destinationId" : "5",
         "id" : "27",
-        "properties" : {
-          "structurizr.dsl.identifier" : "774c0c0b-6572-462f-a918-9db11daad964"
-        },
         "sourceId" : "1",
         "tags" : "Relationship"
       }, {
@@ -43,9 +40,6 @@
         "description" : "Works with data",
         "destinationId" : "12",
         "id" : "29",
-        "properties" : {
-          "structurizr.dsl.identifier" : "3d39b0ab-3516-4571-ba96-0f302c074388"
-        },
         "sourceId" : "2",
         "tags" : "Relationship"
       }, {
@@ -106,9 +100,6 @@
           "description" : "GET",
           "destinationId" : "7",
           "id" : "9",
-          "properties" : {
-            "structurizr.dsl.identifier" : "445b5b3b-5268-46de-ab49-2b53f29b8085"
-          },
           "sourceId" : "5",
           "tags" : "Relationship"
         }, {
@@ -121,9 +112,6 @@
           "description" : "POST",
           "destinationId" : "14",
           "id" : "21",
-          "properties" : {
-            "structurizr.dsl.identifier" : "dcff61d4-9af7-455b-b650-730756738981"
-          },
           "sourceId" : "5",
           "tags" : "Relationship"
         }, {
@@ -148,9 +136,6 @@
             "description" : "Uses",
             "destinationId" : "8",
             "id" : "23",
-            "properties" : {
-              "structurizr.dsl.identifier" : "56971866-e45e-45f3-933b-0037e3977e15"
-            },
             "sourceId" : "7",
             "tags" : "Relationship"
           } ],
@@ -167,9 +152,6 @@
             "description" : "Uses",
             "destinationId" : "4",
             "id" : "24",
-            "properties" : {
-              "structurizr.dsl.identifier" : "63957ece-3725-4042-8334-303760769a1b"
-            },
             "sourceId" : "8",
             "tags" : "Relationship"
           } ],
@@ -199,9 +181,6 @@
           "description" : "Uses",
           "destinationId" : "4",
           "id" : "11",
-          "properties" : {
-            "structurizr.dsl.identifier" : "eb9807c9-172d-433f-92b2-93de3bc17537"
-          },
           "sourceId" : "6",
           "tags" : "Relationship"
         } ],
@@ -232,9 +211,6 @@
           "description" : "GET/DELETE/PUT",
           "destinationId" : "14",
           "id" : "16",
-          "properties" : {
-            "structurizr.dsl.identifier" : "cbe3caf6-aead-49ae-8616-809fb07a7fb5"
-          },
           "sourceId" : "12",
           "tags" : "Relationship,REST"
         }, {
@@ -247,9 +223,6 @@
           "description" : "POST",
           "destinationId" : "7",
           "id" : "18",
-          "properties" : {
-            "structurizr.dsl.identifier" : "03f5b514-140d-427c-a2c8-f532cf884fc4"
-          },
           "sourceId" : "12",
           "tags" : "Relationship,REST"
         }, {
@@ -274,9 +247,6 @@
             "description" : "Uses",
             "destinationId" : "15",
             "id" : "25",
-            "properties" : {
-              "structurizr.dsl.identifier" : "73344c37-7fcc-4078-b1f6-0b278d0d04df"
-            },
             "sourceId" : "14",
             "tags" : "Relationship"
           } ],
@@ -293,9 +263,6 @@
             "description" : "Uses",
             "destinationId" : "4",
             "id" : "26",
-            "properties" : {
-              "structurizr.dsl.identifier" : "d3829ec6-236b-472e-a81b-b9a8a596d7cd"
-            },
             "sourceId" : "15",
             "tags" : "Relationship"
           } ],
@@ -325,9 +292,6 @@
           "description" : "Uses",
           "destinationId" : "4",
           "id" : "20",
-          "properties" : {
-            "structurizr.dsl.identifier" : "8d3da42c-3bbf-4e7b-8185-ad954a6d4b1a"
-          },
           "sourceId" : "13",
           "tags" : "Relationship"
         } ],
@@ -367,24 +331,24 @@
       },
       "elements" : [ {
         "id" : "4",
-        "x" : 2450,
-        "y" : 500
+        "x" : 2449,
+        "y" : 499
       }, {
         "id" : "5",
-        "x" : 200,
-        "y" : 200
+        "x" : 199,
+        "y" : 199
       }, {
         "id" : "7",
-        "x" : 950,
-        "y" : 500
+        "x" : 949,
+        "y" : 499
       }, {
         "id" : "8",
-        "x" : 1700,
-        "y" : 500
+        "x" : 1699,
+        "y" : 499
       }, {
         "id" : "12",
-        "x" : 200,
-        "y" : 800
+        "x" : 199,
+        "y" : 799
       } ],
       "externalContainerBoundariesVisible" : false,
       "key" : "PatientService",
@@ -415,24 +379,24 @@
       },
       "elements" : [ {
         "id" : "4",
-        "x" : 2450,
-        "y" : 500
+        "x" : 2449,
+        "y" : 499
       }, {
         "id" : "5",
-        "x" : 200,
-        "y" : 200
+        "x" : 199,
+        "y" : 199
       }, {
         "id" : "12",
-        "x" : 200,
-        "y" : 800
+        "x" : 199,
+        "y" : 799
       }, {
         "id" : "14",
-        "x" : 950,
-        "y" : 500
+        "x" : 949,
+        "y" : 499
       }, {
         "id" : "15",
-        "x" : 1700,
-        "y" : 500
+        "x" : 1699,
+        "y" : 499
       } ],
       "externalContainerBoundariesVisible" : false,
       "key" : "MeasurementService",
@@ -449,7 +413,7 @@
     } ],
     "configuration" : {
       "branding" : { },
-      "lastSavedView" : "SystemContext",
+      "lastSavedView" : "PatientService",
       "metadataSymbols" : "SquareBrackets",
       "styles" : {
         "elements" : [ {

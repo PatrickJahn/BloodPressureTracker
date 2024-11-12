@@ -46,10 +46,12 @@ services:
       dockerfile: PatientService/Dockerfile
     ports:
       - "49152-49153:80"
+    environment:
+      - ConnectionStrings__PatientDatabase=Server=patient-db;Database=PatientDB;User Id=SA;Password=SuperSecret7!
     deploy:
-      replicas: 2  
-    
-# Measurement-service - scaled to 2 replicas for X-axis scaling
+      replicas: 2
+  
+  # Measurement-service - scaled to 2 replicas for X-axis scaling
   measurement-service:
     build:
       context: .
