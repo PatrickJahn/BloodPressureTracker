@@ -57,6 +57,6 @@ jobs:
           sudo chmod +x /usr/local/bin/docker-compose
         shell: bash
         
-      - name: Deploy to Environment
+      - name: Deploy to Environment (Just simulating to show scaling) 
         run: |
-          docker-compose up -d --scale patient-service=3 --scale measurement-service=3
+          echo docker-compose up -d --scale patient-service=2 --scale measurement-service=2
