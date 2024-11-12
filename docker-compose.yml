@@ -5,3 +5,62 @@ services:
       - "8080:8080"
     volumes:
       - ./docs:/usr/local/structurizr
+
+  ## May change dbs to  auto-scaling kubernetes instances ##
+  # SQL Server instance for patients
+  patient-db:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    environment:
+      - MSSQL_SA_PASSWORD=SuperSecret7!
+      - ACCEPT_EULA=Y
+    volumes:
+      - mssql-data-patients:/var/opt/mssql
+      - ./init/patient-db:/init
+    restart: on-failure    
+    healthcheck:          
+      test: ["CMD-SHELL", "sqlcmd -S localhost -U SA -P 'SuperSecret7!' -Q 'SELECT 1'"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # SQL Server instance for measurements
+  measurement-db:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    environment:
+      - MSSQL_SA_PASSWORD=SuperSecret7!
+      - ACCEPT_EULA=Y
+    volumes:
+      - mssql-data-measurements:/var/opt/mssql
+      - ./init/measurement-db:/init
+    restart: on-failure    
+    healthcheck:          
+      test: ["CMD-SHELL", "sqlcmd -S localhost -U SA -P 'SuperSecret7!' -Q 'SELECT 1'"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Patient-service - scaled to 2 replicas for X-axis scaling
+  patient-service:
+    build:
+      context: .
+      dockerfile: PatientService/Dockerfile
+    ports:
+      - "49152-49153:80"
+    deploy:
+      replicas: 2  
+    
+# Measurement-service - scaled to 2 replicas for X-axis scaling
+  measurement-service:
+    build:
+      context: .
+      dockerfile: MeasurementService/Dockerfile
+    ports:
+      - "49162-49163:80"
+    deploy:
+      replicas: 2
+   
+    
+
+volumes:
+  mssql-data-patients:
+  mssql-data-measurements:
