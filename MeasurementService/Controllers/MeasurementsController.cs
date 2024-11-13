@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MeasurementService.Models;
+using MeasurementService.Services.Interfaces;
+using MeasurementService.DTOs;
 
 namespace MeasurementService.Controllers
 {
@@ -11,41 +13,27 @@ namespace MeasurementService.Controllers
     [Route("api/[controller]")]
     public class MeasurementsController : ControllerBase
     {
-         private readonly IHttpClientFactory _clientFactory;
+         private readonly IMeasurementService _measurementService;
 
-    public MeasurementsController(IHttpClientFactory clientFactory)
+    public MeasurementsController(IMeasurementService clientFactory)
     {
-        _clientFactory = clientFactory;
+        _measurementService = clientFactory;
     }
 
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Measurement>>> GetMeasurements()
     {
-        var client = _clientFactory.CreateClient();
-        var response = await client.GetAsync("http://your-database-endpoint/measurements");
+        var measurements = await _measurementService.GetAllMeasurementsAsync();
 
-        if (response.IsSuccessStatusCode)
-        {
-            var measurements = await response.Content.ReadAsAsync<IEnumerable<Measurement>>();
-            return Ok(measurements);
-        }
-
-        return StatusCode(500, "Error retrieving measurements.");
+        return Ok(measurements);
     }
      [HttpPost]
-    public async Task<ActionResult> CreateMeasurement([FromBody] Measurement measurement)
+    public async Task<ActionResult> CreateMeasurement([FromBody] CreateMeasurementDto measurement)
     {
-        var client = _clientFactory.CreateClient();
-        var response = await client.PostAsJsonAsync("http://your-database-endpoint/measurements", measurement);
+        await _measurementService.AddMeasurementAsync(measurement);
 
-        if (response.IsSuccessStatusCode)
-        {
-            return CreatedAtAction(nameof(GetMeasurements), new { id = measurement.Id }, measurement);
-        }
-
-        return BadRequest("Error creating measurement.");
-        
+    return Ok();    
     }
     
 }
