@@ -8,7 +8,6 @@ namespace PatientService.Controllers
     [Route("api/[controller]")]
     public class PatientController(IPatientService patientService) : ControllerBase
     {
-        // GET: api/patient
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PatientDto>>> GetAllPatients()
         {
@@ -16,7 +15,6 @@ namespace PatientService.Controllers
             return Ok(patients);
         }
 
-        // GET: api/patient/{id}
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<PatientDto>> GetPatientById(Guid id)
         {
@@ -28,7 +26,6 @@ namespace PatientService.Controllers
             return Ok(patient);
         }
 
-        // POST: api/patient
         [HttpPost]
         public async Task<ActionResult> CreatePatient([FromBody] CreatePatientDto patientDto)
         {
@@ -41,7 +38,6 @@ namespace PatientService.Controllers
             return CreatedAtAction(nameof(GetPatientById), new { id = new Guid() }, patientDto);
         }
 
-        // PUT: api/patient/{id}
         [HttpPut("{id:guid}")]
         public async Task<ActionResult> UpdatePatient(Guid id, [FromBody] UpdatePatientDto patientDto)
         {
@@ -60,7 +56,6 @@ namespace PatientService.Controllers
             return NoContent();
         }
 
-        // DELETE: api/patient/{id}
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult> DeletePatient(Guid id)
         {

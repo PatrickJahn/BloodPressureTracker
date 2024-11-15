@@ -7,9 +7,6 @@ services:
     environment:
       - MSSQL_SA_PASSWORD=SuperSecret7!
       - ACCEPT_EULA=Y
-    volumes:
-      - mssql-data-patients:/var/opt/mssql
-      - ./init/patient-db:/init
     restart: on-failure    
     healthcheck:          
       test: ["CMD-SHELL", "sqlcmd -S localhost -U SA -P 'SuperSecret7!' -Q 'SELECT 1'"]
@@ -37,6 +34,8 @@ services:
       dockerfile: PatientService/Dockerfile
     ports:
       - "49152-49153:8080"
+    environment:
+      ConnectionStrings__PatientDb: "Server=patient-db;Database=PatientDb;User Id=sa;Password=YourStrong@Password;"
     deploy:
       replicas: 2  
     depends_on:

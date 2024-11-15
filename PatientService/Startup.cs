@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PatientService.Data;
 using PatientService.Logging;
+using PatientService.Mappers;
 using PatientService.Repositories;
 using PatientService.Repositories.Interfaces;
 using PatientService.Services.Interfaces;
@@ -23,7 +24,7 @@ namespace PatientService
             services.AddDbContext<PatientDbContext>(options =>
                 options.UseSqlServer(connectionString));
             
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(typeof(PatientMappingProfile));
             
             services.AddScoped<IPatientRepository, PatientRepository>();
             services.AddScoped<IPatientService, Services.PatientService>();
@@ -34,14 +35,27 @@ namespace PatientService
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PatientService API v1"));
-            }
+      
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PatientService API v1"));
+           
             app.UseMiddleware<ErrorHandler>();
-
+ 
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<PatientDbContext>();
+                try
+                {
+                    dbContext.Database.Migrate(); 
+                    DbSeeder.Seed(dbContext);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error applying database migrations: {ex.Message}");
+                    throw;
+                }
+            }
             app.UseHttpsRedirection();
 
             app.UseRouting();

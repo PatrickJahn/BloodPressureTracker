@@ -10,11 +10,8 @@ namespace PatientService.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Patient>().ToTable("Patients");
 
-            modelBuilder.Entity<Patient>()
-                .Property(p => p.Name)
-                .IsRequired()
-                .HasMaxLength(100);
 
         }
     }
