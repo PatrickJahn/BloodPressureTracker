@@ -79,6 +79,26 @@ services:
         condition: on-failure
     networks:
       - app-network
+        
+  # Adding Seq for logging
+  seq:
+    image: datalust/seq:latest
+    ports:
+      - 5341:5341 # Exposing Seq on localhost:534
+      - 5342:80 # Exposing Seq on localhost:5341
+    environment:
+      ACCEPT_EULA: Y
+    volumes:
+      - seq-data:/data
+
+  # Adding Zipkin for tracing
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - 9411:9411 # Exposing Zipkin on localhost:9411
+
+
+
 networks:
   app-network:
     driver: bridge
