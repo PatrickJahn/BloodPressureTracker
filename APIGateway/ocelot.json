@@ -14,7 +14,7 @@
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 2,
         "DurationOfBreak": 2000,
-        "TimeoutValue": 22
+        "TimeoutValue": 2000
       }
     },
     {
@@ -31,7 +31,7 @@
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 2,
         "DurationOfBreak": 2000,
-        "TimeoutValue": 22
+        "TimeoutValue": 2000
       }
     },
     {
@@ -48,7 +48,7 @@
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 2,
         "DurationOfBreak": 2000,
-        "TimeoutValue": 22
+        "TimeoutValue": 2000
       }
     },
     {
@@ -65,7 +65,7 @@
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 2,
         "DurationOfBreak": 2000,
-        "TimeoutValue": 22
+        "TimeoutValue": 2000
       }
     },
     {
@@ -82,7 +82,7 @@
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 2,
         "DurationOfBreak": 2000,
-        "TimeoutValue": 22
+        "TimeoutValue": 2000
       }
     },
 
@@ -101,7 +101,7 @@
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 2,
         "DurationOfBreak": 2000,
-        "TimeoutValue": 22
+        "TimeoutValue": 2000
       }
     },
     {
@@ -118,7 +118,7 @@
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 2,
         "DurationOfBreak": 2000,
-        "TimeoutValue": 22
+        "TimeoutValue": 2000
       }
     },
 
@@ -137,7 +137,7 @@
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 1,
         "DurationOfBreak": 5000,
-        "TimeoutValue": 22
+        "TimeoutValue": 2000
       }
     }
   ],

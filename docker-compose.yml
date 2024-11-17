@@ -64,9 +64,7 @@ services:
       # replicas: 2  # Two replicas for x-axis scaling
       restart_policy:
         condition: on-failure
-    depends_on:
-      - patient-service
-      - measurement-service
+    
 
 
 
