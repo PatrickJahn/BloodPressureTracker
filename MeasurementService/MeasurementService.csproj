@@ -30,7 +30,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LoggingService\LoggingService.csproj" />
+      <ProjectReference Include="..\Monitoring\Monitoring.csproj" />
     </ItemGroup>
 
 </Project>

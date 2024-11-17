@@ -88,8 +88,7 @@ services:
       - 5342:80 # Exposing Seq on localhost:5341
     environment:
       ACCEPT_EULA: Y
-    volumes:
-      - seq-data:/data
+
 
   # Adding Zipkin for tracing
   zipkin:
