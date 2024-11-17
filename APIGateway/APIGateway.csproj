@@ -15,6 +15,7 @@
 
     <ItemGroup>
       <PackageReference Include="Ocelot" Version="23.3.6" />
+      <PackageReference Include="Ocelot.Provider.Polly" Version="23.3.6" />
     </ItemGroup>
 
 </Project>
