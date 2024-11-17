@@ -28,6 +28,15 @@ namespace MeasurementService.Controllers
 
         return Ok(measurements);
     }
+    
+    [HttpGet("{ssn}")]
+    public async Task<ActionResult<IEnumerable<Measurement>>> GetMeasurementsByPatientSSn(string ssn)
+    {
+        var measurements = await _measurementService.GetMeasurementsBySSn(ssn);
+        return Ok(measurements);
+    }
+
+    
      [HttpPost]
     public async Task<ActionResult> CreateMeasurement([FromBody] CreateMeasurementDto measurement)
     {

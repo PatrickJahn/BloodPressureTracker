@@ -36,6 +36,10 @@ namespace MeasurementService.Migrations
                     b.Property<int>("Diastolic")
                         .HasColumnType("int");
 
+                    b.Property<string>("PatientSSN")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("Seen")
                         .HasColumnType("bit");
 

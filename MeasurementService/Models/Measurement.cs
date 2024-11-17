@@ -12,5 +12,8 @@ namespace MeasurementService.Models
         public int Systolic { get; set; }     // Systolic blood pressure value
         public int Diastolic { get; set; }    // Diastolic blood pressure value
         public bool Seen { get; set; }        // Flag to indicate if the measurement was seen/reviewed
+        
+        public string PatientSSN { get; set; }      
+
     }
 }

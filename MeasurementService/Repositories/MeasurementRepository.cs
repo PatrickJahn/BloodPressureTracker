@@ -12,6 +12,11 @@ namespace MeasurementService.Repositories
             return await context.Measurements.ToListAsync();
         }
 
+        public async Task<IEnumerable<Measurement?>> GetAllMeasurementsBySSnAsync(string ssn)
+        {
+            return await context.Measurements.Where(x => x.PatientSSN.Equals(ssn)).ToListAsync();
+        }
+
         public async Task<Measurement?> GetMeasurementByIdAsync(Guid MeasurementId)
         {
             return await context.Measurements.FindAsync(MeasurementId);

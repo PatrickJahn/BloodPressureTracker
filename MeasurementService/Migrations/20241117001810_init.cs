@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MeasurementService.Migrations
 {
     /// <inheritdoc />
-    public partial class inital : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,7 +20,8 @@ namespace MeasurementService.Migrations
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Systolic = table.Column<int>(type: "int", nullable: false),
                     Diastolic = table.Column<int>(type: "int", nullable: false),
-                    Seen = table.Column<bool>(type: "bit", nullable: false)
+                    Seen = table.Column<bool>(type: "bit", nullable: false),
+                    PatientSSN = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

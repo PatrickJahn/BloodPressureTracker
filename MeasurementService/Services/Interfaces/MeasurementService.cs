@@ -15,16 +15,30 @@ namespace MeasurementService.Services
             return mapper.Map<IEnumerable<MeasurementDto>>(Measurements);
         }
 
+        public async Task<IEnumerable<MeasurementDto>> GetMeasurementsBySSn(string ssn)
+        {
+            var measurements = await MeasurementRepository.GetAllMeasurementsBySSnAsync(ssn);
+            return mapper.Map<IEnumerable<MeasurementDto>>(measurements);
+
+        }
+
         public async Task<MeasurementDto> GetMeasurementByIdAsync(Guid MeasurementId)
         {
             var Measurement = await MeasurementRepository.GetMeasurementByIdAsync(MeasurementId);
             return mapper.Map<MeasurementDto>(Measurement);
         }
 
-        public async Task AddMeasurementAsync(CreateMeasurementDto MeasurementDto)
+        public async Task AddMeasurementAsync(CreateMeasurementDto dto)
         {
-            var Measurement = mapper.Map<Measurement>(MeasurementDto);
-            await MeasurementRepository.AddMeasurementAsync(Measurement);
+            var measurement = new Measurement()
+            {
+                Date = DateTime.UtcNow,
+                Seen = false,
+                Diastolic = dto.Diastolic,
+                Systolic = dto.Systolic,
+                PatientSSN = dto.PatientSSn
+            };
+            await MeasurementRepository.AddMeasurementAsync(measurement);
         }
 
         public async Task DeleteMeasurementAsync(Guid MeasurementId)

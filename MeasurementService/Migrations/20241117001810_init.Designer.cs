@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MeasurementService.Migrations
 {
     [DbContext(typeof(MeasurementDbContext))]
-    [Migration("20241115135255_inital")]
-    partial class inital
+    [Migration("20241117001810_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,6 +38,10 @@ namespace MeasurementService.Migrations
 
                     b.Property<int>("Diastolic")
                         .HasColumnType("int");
+
+                    b.Property<string>("PatientSSN")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Seen")
                         .HasColumnType("bit");
