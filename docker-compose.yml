@@ -13,6 +13,8 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    networks:
+      - app-network
 
   # SQL Server instance for measurements
   measurement-db:
@@ -26,6 +28,8 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    networks:
+      - app-network
 
   # Patient-service - scaled to 2 replicas for X-axis scaling
   patient-service:
@@ -40,6 +44,10 @@ services:
       replicas: 2  
     depends_on:
       - patient-db
+    networks:
+      app-network:
+        aliases:
+          - patient-service
 
 # Measurement-service - scaled to 2 replicas for X-axis scaling
   measurement-service:
@@ -52,6 +60,11 @@ services:
       replicas: 2
     depends_on:
       - measurement-db
+    networks:
+      app-network:
+        aliases:
+          - measurement-service
+    
     
   apigateway:
     image: apigateway
@@ -64,6 +77,11 @@ services:
       # replicas: 2  # Two replicas for x-axis scaling
       restart_policy:
         condition: on-failure
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
     
 
 

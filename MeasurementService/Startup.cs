@@ -4,6 +4,8 @@ using MeasurementService.Mapper;
 using MeasurementService.Repositories;
 using MeasurementService.Repositories.Interfaces;
 using MeasurementService.Services.Interfaces;
+using Microsoft.FeatureManagement;
+using Microsoft.OpenApi.Models;
 
 
 namespace MeasurementService
@@ -28,26 +30,27 @@ namespace MeasurementService
             services.AddScoped<IMeasurementRepository, MeasurementRepository>();
             services.AddScoped<IMeasurementService, Services.MeasurementService>();
           
-            
+            services.AddFeatureManagement();
             services.AddControllers();
-            services.AddSwaggerGen();
-        }
+            services.AddMvc();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Measurements API", Version = "v1" });
+            });        }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
      
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MeasurementService API v1"));  
-            
-            
-            
-            // Apply migrations
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MeasurementService API v1"));
+
+
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<MeasurementDbContext>();
                 try
                 {
-                    dbContext.Database.Migrate(); // Apply any pending migrations
+                    dbContext.Database.Migrate(); 
                     DBSeeder.Seed(dbContext);
                 }
                 catch (Exception ex)

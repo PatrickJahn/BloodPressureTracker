@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.FeatureManagement;
+using Microsoft.OpenApi.Models;
 using PatientService.Data;
 using PatientService.Logging;
 using PatientService.Mappers;
@@ -29,10 +31,13 @@ namespace PatientService
             services.AddScoped<IPatientRepository, PatientRepository>();
             services.AddScoped<IPatientService, Services.PatientService>();
             services.AddLoggingConfiguration(Configuration);
-            
+            services.AddFeatureManagement();
             services.AddControllers();
-            services.AddSwaggerGen();
-        }
+            services.AddMvc();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Patients API", Version = "v1" });
+            });          }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
       

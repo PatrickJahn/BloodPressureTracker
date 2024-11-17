@@ -11,27 +11,14 @@
       ],
       "UpstreamPathTemplate": "/patients",
       "UpstreamHttpMethod": [ "GET" ],
+      "SwaggerKey": "patients",
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 2,
         "DurationOfBreak": 2000,
         "TimeoutValue": 2000
-      }
-    },
-    {
-      "DownstreamPathTemplate": "/api/Patient/{id}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "patient-service",
-          "Port": 8080
-        }
-      ],
-      "UpstreamPathTemplate": "/patients/{id}",
-      "UpstreamHttpMethod": [ "GET" ],
-      "QoSOptions": {
-        "ExceptionsAllowedBeforeBreaking": 2,
-        "DurationOfBreak": 2000,
-        "TimeoutValue": 2000
+      },
+      "Fallback": {
+        "DownstreamPathTemplate": "/static/fallback/patients"
       }
     },
     {
@@ -45,10 +32,35 @@
       ],
       "UpstreamPathTemplate": "/patients",
       "UpstreamHttpMethod": [ "POST" ],
+      "SwaggerKey": "patients",
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 2,
         "DurationOfBreak": 2000,
         "TimeoutValue": 2000
+      },
+      "Fallback": {
+        "DownstreamPathTemplate": "/static/fallback/patients"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/Patient/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "patient-service",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/patients/{id}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "SwaggerKey": "patients",
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 2,
+        "DurationOfBreak": 2000,
+        "TimeoutValue": 2000
+      },
+      "Fallback": {
+        "DownstreamPathTemplate": "/static/fallback/patients/{id}"
       }
     },
     {
@@ -62,10 +74,14 @@
       ],
       "UpstreamPathTemplate": "/patients/{id}",
       "UpstreamHttpMethod": [ "PUT" ],
+      "SwaggerKey": "patients",
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 2,
         "DurationOfBreak": 2000,
         "TimeoutValue": 2000
+      },
+      "Fallback": {
+        "DownstreamPathTemplate": "/static/fallback/patients/{id}"
       }
     },
     {
@@ -79,14 +95,16 @@
       ],
       "UpstreamPathTemplate": "/patients/{id}",
       "UpstreamHttpMethod": [ "DELETE" ],
+      "SwaggerKey": "patients",
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 2,
         "DurationOfBreak": 2000,
         "TimeoutValue": 2000
+      },
+      "Fallback": {
+        "DownstreamPathTemplate": "/static/fallback/patients/{id}"
       }
     },
-
-
     {
       "DownstreamPathTemplate": "/api/Measurements",
       "DownstreamScheme": "http",
@@ -98,10 +116,35 @@
       ],
       "UpstreamPathTemplate": "/measurements",
       "UpstreamHttpMethod": [ "GET" ],
+      "SwaggerKey": "measurements",
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 2,
         "DurationOfBreak": 2000,
         "TimeoutValue": 2000
+      },
+      "Fallback": {
+        "DownstreamPathTemplate": "/static/fallback/measurements"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/Measurements",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "measurement-service",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/measurements",
+      "UpstreamHttpMethod": [ "POST" ],
+      "SwaggerKey": "measurements",
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 2,
+        "DurationOfBreak": 2000,
+        "TimeoutValue": 2000
+      },
+      "Fallback": {
+        "DownstreamPathTemplate": "/static/fallback/measurements"
       }
     },
     {
@@ -115,34 +158,62 @@
       ],
       "UpstreamPathTemplate": "/measurements/{ssn}",
       "UpstreamHttpMethod": [ "GET" ],
+      "SwaggerKey": "measurements",
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 2,
         "DurationOfBreak": 2000,
         "TimeoutValue": 2000
-      }
-    },
-
-    {
-      "DownstreamPathTemplate": "/api/Measurements",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "measurement-service",
-          "Port": 8080
-        }
-      ],
-      "UpstreamPathTemplate": "/measurements",
-      "UpstreamHttpMethod": [ "POST" ],
-
-      "QoSOptions": {
-        "ExceptionsAllowedBeforeBreaking": 1,
-        "DurationOfBreak": 5000,
-        "TimeoutValue": 2000
+      },
+      "Fallback": {
+        "DownstreamPathTemplate": "/static/fallback/measurements/{ssn}"
       }
     }
   ],
-  
+  "SwaggerEndPoints": [
+    {
+      "Key": "patients",
+      "Config": [
+        {
+          "Name": "Patient Service",
+          "Version": "v1",
+          "Url": "http://patient-service:8080/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "measurements",
+      "Config": [
+        {
+          "Name": "Measurement Service",
+          "Version": "v1",
+          "Url": "http://measurement-service:8080/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ],
   "GlobalConfiguration": {
-    "BaseUrl": "http://localhost:5001"
+    "BaseUrl": "http://localhost:5001",
+    "StaticFallback": {
+      "/static/fallback/patients": {
+        "Content": { "Message": "The Patient service is unavailable. Please try again later." },
+        "ContentType": "application/json",
+        "StatusCode": 503
+      },
+      "/static/fallback/patients/{id}": {
+        "Content": { "Message": "The Patient service is unavailable for Patient ID: {id}. Please try again later." },
+        "ContentType": "application/json",
+        "StatusCode": 503
+      },
+      "/static/fallback/measurements": {
+        "Content": { "Message": "The Measurement service is unavailable. Please try again later." },
+        "ContentType": "application/json",
+        "StatusCode": 503
+      },
+      "/static/fallback/measurements/{ssn}": {
+        "Content": { "Message": "Measurement data is unavailable for SSN: {ssn}. Please try again later." },
+        "ContentType": "application/json",
+        "StatusCode": 503
+      }
+    }
   }
 }

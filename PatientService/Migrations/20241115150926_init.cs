@@ -11,29 +11,35 @@ namespace PatientService.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Patients",
-                columns: table => new
-                {
-                    PatientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SSN = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MedicalHistory = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Patients", x => x.PatientId);
-                });
+            // Check if the Patients table exists before creating it
+            migrationBuilder.Sql(
+                @"
+                IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Patients' AND xtype='U')
+                BEGIN
+                    CREATE TABLE Patients (
+                        PatientId UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
+                        SSN NVARCHAR(MAX) NOT NULL,
+                        Name NVARCHAR(100) NOT NULL,
+                        Email NVARCHAR(MAX) NOT NULL,
+                        DateOfBirth DATETIME2 NOT NULL,
+                        Gender NVARCHAR(MAX) NOT NULL,
+                        MedicalHistory NVARCHAR(MAX) NULL
+                    )
+                END
+                ");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Patients");
+            // Check if the Patients table exists before dropping it
+            migrationBuilder.Sql(
+                @"
+                IF OBJECT_ID('dbo.Patients', 'U') IS NOT NULL
+                BEGIN
+                    DROP TABLE Patients
+                END
+                ");
         }
     }
 }

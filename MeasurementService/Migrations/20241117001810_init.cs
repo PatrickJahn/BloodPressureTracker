@@ -5,35 +5,37 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MeasurementService.Migrations
 {
-    /// <inheritdoc />
     public partial class init : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Measurements",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Systolic = table.Column<int>(type: "int", nullable: false),
-                    Diastolic = table.Column<int>(type: "int", nullable: false),
-                    Seen = table.Column<bool>(type: "bit", nullable: false),
-                    PatientSSN = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Measurements", x => x.Id);
-                });
+            // Check if the Measurements table exists before creating it
+            migrationBuilder.Sql(
+                @"
+                IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Measurements' AND xtype='U')
+                BEGIN
+                    CREATE TABLE Measurements (
+                        Id INT IDENTITY(1,1) PRIMARY KEY,
+                        Date DATETIME2 NOT NULL,
+                        Systolic INT NOT NULL,
+                        Diastolic INT NOT NULL,
+                        Seen BIT NOT NULL,
+                        PatientSSN NVARCHAR(MAX) NOT NULL
+                    )
+                END
+                ");
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Measurements");
+            // Check if the Measurements table exists before dropping it
+            migrationBuilder.Sql(
+                @"
+                IF OBJECT_ID('dbo.Measurements', 'U') IS NOT NULL
+                BEGIN
+                    DROP TABLE Measurements
+                END
+                ");
         }
     }
 }
