@@ -9,6 +9,9 @@
         { "Host": "patient-service-region-nordjylland", "Port": 8080 },
         { "Host": "patient-service-region-syddanmark", "Port": 8080 }
       ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
       "UpstreamPathTemplate": "/{regionCode}/patients",
       "UpstreamHttpMethod": [ "GET", "POST" ],
       "SwaggerKey": "patients",
@@ -30,6 +33,9 @@
         { "Host": "patient-service-region-nordjylland", "Port": 8080 },
         { "Host": "patient-service-region-syddanmark", "Port": 8080 }
       ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
       "UpstreamPathTemplate": "/{regionCode}/patients/{id}",
       "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ],
       "SwaggerKey": "patients",
@@ -51,6 +57,9 @@
         { "Host": "measurement-service-region-nordjylland", "Port": 8080 },
         { "Host": "measurement-service-region-syddanmark", "Port": 8080 }
       ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
       "UpstreamPathTemplate": "/{regionCode}/measurements",
       "UpstreamHttpMethod": [ "GET", "POST" ],
       "SwaggerKey": "measurements",
@@ -72,6 +81,9 @@
         { "Host": "measurement-service-region-nordjylland", "Port": 8080 },
         { "Host": "measurement-service-region-syddanmark", "Port": 8080 }
       ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
       "UpstreamPathTemplate": "/{regionCode}/measurements/{ssn}",
       "UpstreamHttpMethod": [ "GET" ],
       "SwaggerKey": "measurements",

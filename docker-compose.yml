@@ -100,7 +100,7 @@ services:
       dockerfile: PatientService/Dockerfile
     environment:
       REGION_CODE: "Zealand"
-      ConnectionStrings__PatientDatabase: "Server=patient-db-region-zealand;Database=PatientDb;User Id=sa;Password=SuperSecret7!Encrypt=false;TrustServerCertificate=True;"
+      ConnectionStrings__PatientDatabase: "Server=patient-db-region-zealand;Database=PatientDb;User Id=sa;Password=SuperSecret7!;Encrypt=false;TrustServerCertificate=True;"
     deploy:
       replicas: 2 # X-axis scaling
     depends_on:
@@ -252,7 +252,7 @@ services:
       dockerfile: MeasurementService/Dockerfile
     environment:
       REGION_CODE: "Zealand"
-      ConnectionStrings__MeasurementDatabase: "Server=measurement-db-region-zealand;Database=MeasurementDb;User Id=sa;Password=SuperSecret7!;Encrypt=false;TrustServerCertificate=True;"
+      ConnectionStrings__MeasurementDatabase: "Server=measurement-db-region-zealand;Database=MeasurementDb;User Id=sa;Password=SuperSecret7!;Encrypt=false;"
     deploy:
       replicas: 2 # X-axis scaling
     depends_on:
@@ -269,7 +269,7 @@ services:
       dockerfile: MeasurementService/Dockerfile
     environment:
       REGION_CODE: "Midtjylland"
-      ConnectionStrings__MeasurementDatabase: "Server=measurement-db-region-midtjylland;Database=MeasurementDb;User Id=sa;Password=SuperSecret7!;Encrypt=false;TrustServerCertificate=True;"
+      ConnectionStrings__MeasurementDatabase: "Server=measurement-db-region-midtjylland;Database=MeasurementDb;User Id=sa;Password=SuperSecret7!;Encrypt=false;"
     deploy:
       replicas: 2 # X-axis scaling
     depends_on:
@@ -286,7 +286,7 @@ services:
       dockerfile: MeasurementService/Dockerfile
     environment:
       REGION_CODE: "Nordjylland"
-      ConnectionStrings__MeasurementDatabase: "Server=measurement-db-region-nordkylland;Database=MeasurementDb;User Id=sa;Password=SuperSecret7!;Encrypt=false;TrustServerCertificate=True;"
+      ConnectionStrings__MeasurementDatabase: "Server=measurement-db-region-nordjylland;Database=MeasurementDb;User Id=sa;Password=SuperSecret7!;Encrypt=false;"
     deploy:
       replicas: 2 # X-axis scaling
     depends_on:
@@ -303,7 +303,7 @@ services:
       dockerfile: MeasurementService/Dockerfile
     environment:
       REGION_CODE: "Syddanmark"
-      ConnectionStrings__MeasurementDatabase: "Server=measurement-db-region-syddanmark;Database=MeasurementDb;User Id=sa;Password=SuperSecret7!;Encrypt=false;TrustServerCertificate=True;"
+      ConnectionStrings__MeasurementDatabase: "Server=measurement-db-region-syddanmark;Database=MeasurementDb;User Id=sa;Password=SuperSecret7!;Encrypt=false;"
     deploy:
       replicas: 2 # X-axis scaling
     depends_on:

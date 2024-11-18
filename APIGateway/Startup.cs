@@ -2,6 +2,7 @@ using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using Microsoft.FeatureManagement;
 using APIGateway.Middleware;
+using Microsoft.OpenApi.Models;
 using Ocelot.Provider.Polly;
 
 namespace APIGateway
@@ -16,6 +17,15 @@ namespace APIGateway
             services.AddSwaggerForOcelot(Configuration);
             services.AddMvc();
             services.AddFeatureManagement();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Gateway API",
+                    Version = "v1",
+                });
+            });
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
