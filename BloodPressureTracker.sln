@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIGateway", "APIGateway\AP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monitoring", "Monitoring\Monitoring.csproj", "{D006864A-3F07-4630-AF2B-5E217C0076A2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{39A74110-4EC2-4D82-BA39-EA58F09FBB11}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{D006864A-3F07-4630-AF2B-5E217C0076A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D006864A-3F07-4630-AF2B-5E217C0076A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D006864A-3F07-4630-AF2B-5E217C0076A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39A74110-4EC2-4D82-BA39-EA58F09FBB11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39A74110-4EC2-4D82-BA39-EA58F09FBB11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39A74110-4EC2-4D82-BA39-EA58F09FBB11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39A74110-4EC2-4D82-BA39-EA58F09FBB11}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
