@@ -1,89 +1,328 @@
+version: '3.9'
+
 services:
-
-  ## May change dbs to auto-scaling kubernetes instances ##
-  # SQL Server instance for patients
-  patient-db:
+  ## Patient Database for Region Zealand
+  patient-db-region-zealand:
     image: mcr.microsoft.com/azure-sql-edge:latest
     environment:
       - MSSQL_SA_PASSWORD=SuperSecret7!
       - ACCEPT_EULA=Y
-    restart: on-failure    
-    healthcheck:          
+    restart: on-failure
+    healthcheck:
       test: ["CMD-SHELL", "sqlcmd -S localhost -U SA -P 'SuperSecret7!' -Q 'SELECT 1'"]
       interval: 30s
       timeout: 10s
       retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 1g        
+          cpus: "1.0"       
+        reservations:
+          memory: 512m      
+          cpus: "0.5"      
     networks:
       - app-network
 
-  # SQL Server instance for measurements
-  measurement-db:
+  ## Patient Database for Region Midtjylland
+  patient-db-region-midtjylland:
     image: mcr.microsoft.com/azure-sql-edge:latest
     environment:
       - MSSQL_SA_PASSWORD=SuperSecret7!
       - ACCEPT_EULA=Y
-    restart: on-failure    
-    healthcheck:          
+    restart: on-failure
+    healthcheck:
       test: ["CMD-SHELL", "sqlcmd -S localhost -U SA -P 'SuperSecret7!' -Q 'SELECT 1'"]
       interval: 30s
       timeout: 10s
       retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+          cpus: "1.0"
+        reservations:
+          memory: 512m
+          cpus: "0.5"
     networks:
       - app-network
 
-  # Patient-service - scaled to 2 replicas for X-axis scaling
-  patient-service:
+  ## Patient Database for Region Nordjylland
+  patient-db-region-nordjylland:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    environment:
+      - MSSQL_SA_PASSWORD=SuperSecret7!
+      - ACCEPT_EULA=Y
+    restart: on-failure
+    healthcheck:
+      test: ["CMD-SHELL", "sqlcmd -S localhost -U SA -P 'SuperSecret7!' -Q 'SELECT 1'"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+          cpus: "1.0"
+        reservations:
+          memory: 512m
+          cpus: "0.5"
+    networks:
+      - app-network
+
+  ## Patient Database for Region Syddanmark
+  patient-db-region-syddanmark:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    environment:
+      - MSSQL_SA_PASSWORD=SuperSecret7!
+      - ACCEPT_EULA=Y
+    restart: on-failure
+    healthcheck:
+      test: ["CMD-SHELL", "sqlcmd -S localhost -U SA -P 'SuperSecret7!' -Q 'SELECT 1'"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+          cpus: "1.0"
+        reservations:
+          memory: 512m
+          cpus: "0.5"
+    networks:
+      - app-network
+
+  ## Patient Service for Region Zealand
+  patient-service-region-zealand:
     build:
       context: .
       dockerfile: PatientService/Dockerfile
-    ports:
-      - "49152-49153:8080"
     environment:
-      ConnectionStrings__PatientDb: "Server=patient-db;Database=PatientDb;User Id=sa;Password=YourStrong@Password;"
+      REGION_CODE: "Zealand"
+      ConnectionStrings__PatientDatabase: "Server=patient-db-region-zealand;Database=PatientDb;User Id=sa;Password=SuperSecret7!Encrypt=false;TrustServerCertificate=True;"
     deploy:
-      replicas: 2  
+      replicas: 2 # X-axis scaling
     depends_on:
-      - patient-db
+      - patient-db-region-zealand
     networks:
       app-network:
         aliases:
-          - patient-service
+          - patient-service-region-zealand
 
-# Measurement-service - scaled to 2 replicas for X-axis scaling
-  measurement-service:
+  ## Patient Service for Region Midtjylland
+  patient-service-region-midtjylland:
+    build:
+      context: .
+      dockerfile: PatientService/Dockerfile
+    environment:
+      REGION_CODE: "Midtjylland"
+      ConnectionStrings__PatientDatabase: "Server=patient-db-region-midtjylland;Database=PatientDb;User Id=sa;Password=SuperSecret7!;Encrypt=false;TrustServerCertificate=True;"
+    deploy:
+      replicas: 2 # X-axis scaling
+    depends_on:
+      - patient-db-region-midtjylland
+    networks:
+      app-network:
+        aliases:
+          - patient-service-region-midtjylland
+
+  ## Patient Service for Region Nordjylland
+  patient-service-region-nordjylland:
+    build:
+      context: .
+      dockerfile: PatientService/Dockerfile
+    environment:
+      REGION_CODE: "Nordjylland"
+      ConnectionStrings__PatientDatabase: "Server=patient-db-region-nordjylland;Database=PatientDb;User Id=sa;Password=SuperSecret7!;Encrypt=false;TrustServerCertificate=True;"
+    deploy:
+      replicas: 2 # X-axis scaling
+    depends_on:
+      - patient-db-region-nordjylland
+    networks:
+      app-network:
+        aliases:
+          - patient-service-region-nordjylland
+
+  ## Patient Service for Region Syddanmark
+  patient-service-region-syddanmark:
+    build:
+      context: .
+      dockerfile: PatientService/Dockerfile
+    environment:
+      REGION_CODE: "Syddanmark"
+      ConnectionStrings__PatientDatabase: "Server=patient-db-region-syddanmark;Database=PatientDb;User Id=sa;Password=SuperSecret7!;Encrypt=false;TrustServerCertificate=True;"
+    deploy:
+      replicas: 2 # X-axis scaling
+    depends_on:
+      - patient-db-region-syddanmark
+    networks:
+      app-network:
+        aliases:
+          - patient-service-region-syddanmark
+
+  ## Measurement Database for Region Zealand
+  measurement-db-region-zealand:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    environment:
+      - MSSQL_SA_PASSWORD=SuperSecret7!
+      - ACCEPT_EULA=Y
+    restart: on-failure
+    healthcheck:
+      test: ["CMD-SHELL", "sqlcmd -S localhost -U SA -P 'SuperSecret7!' -Q 'SELECT 1'"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - app-network
+
+  ## Measurement Database for Region Midtjylland
+  measurement-db-region-midtjylland:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    environment:
+      - MSSQL_SA_PASSWORD=SuperSecret7!
+      - ACCEPT_EULA=Y
+    restart: on-failure
+    healthcheck:
+      test: ["CMD-SHELL", "sqlcmd -S localhost -U SA -P 'SuperSecret7!' -Q 'SELECT 1'"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+          cpus: "1.0"
+        reservations:
+          memory: 512m
+          cpus: "0.5"
+    networks:
+      - app-network
+
+  ## Measurement Database for Region Nordjylland
+  measurement-db-region-nordjylland:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    environment:
+      - MSSQL_SA_PASSWORD=SuperSecret7!
+      - ACCEPT_EULA=Y
+    restart: on-failure
+    healthcheck:
+      test: ["CMD-SHELL", "sqlcmd -S localhost -U SA -P 'SuperSecret7!' -Q 'SELECT 1'"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+          cpus: "1.0"
+        reservations:
+          memory: 512m
+          cpus: "0.5"
+    networks:
+      - app-network
+
+  ## Measurement Database for Region Syddanmark
+  measurement-db-region-syddanmark:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    environment:
+      - MSSQL_SA_PASSWORD=SuperSecret7!
+      - ACCEPT_EULA=Y
+    restart: on-failure
+    healthcheck:
+      test: ["CMD-SHELL", "sqlcmd -S localhost -U SA -P 'SuperSecret7!' -Q 'SELECT 1'"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+          cpus: "1.0"
+        reservations:
+          memory: 512m
+          cpus: "0.5"
+    networks:
+      - app-network
+
+  ## Measurement Service for Region Zealand
+  measurement-service-region-zealand:
     build:
       context: .
       dockerfile: MeasurementService/Dockerfile
-    ports:
-      - "49162-49163:8080"
+    environment:
+      REGION_CODE: "Zealand"
+      ConnectionStrings__MeasurementDatabase: "Server=measurement-db-region-zealand;Database=MeasurementDb;User Id=sa;Password=SuperSecret7!;Encrypt=false;TrustServerCertificate=True;"
     deploy:
-      replicas: 2
+      replicas: 2 # X-axis scaling
     depends_on:
-      - measurement-db
+      - measurement-db-region-zealand
     networks:
       app-network:
         aliases:
-          - measurement-service
-    
-    
+          - measurement-service-region-zealand
+
+  ## Measurement Service for Region Midtjylland
+  measurement-service-region-midtjylland:
+    build:
+      context: .
+      dockerfile: MeasurementService/Dockerfile
+    environment:
+      REGION_CODE: "Midtjylland"
+      ConnectionStrings__MeasurementDatabase: "Server=measurement-db-region-midtjylland;Database=MeasurementDb;User Id=sa;Password=SuperSecret7!;Encrypt=false;TrustServerCertificate=True;"
+    deploy:
+      replicas: 2 # X-axis scaling
+    depends_on:
+      - measurement-db-region-midtjylland
+    networks:
+      app-network:
+        aliases:
+          - measurement-service-region-midtjylland
+
+  ## Measurement Service for Region Nordjylland
+  measurement-service-region-nordjylland:
+    build:
+      context: .
+      dockerfile: MeasurementService/Dockerfile
+    environment:
+      REGION_CODE: "Nordjylland"
+      ConnectionStrings__MeasurementDatabase: "Server=measurement-db-region-nordkylland;Database=MeasurementDb;User Id=sa;Password=SuperSecret7!;Encrypt=false;TrustServerCertificate=True;"
+    deploy:
+      replicas: 2 # X-axis scaling
+    depends_on:
+      - measurement-db-region-nordjylland
+    networks:
+      app-network:
+        aliases:
+          - measurement-service-region-nordjylland
+
+  ## Measurement Service for Region Syddanmark
+  measurement-service-region-syddanmark:
+    build:
+      context: .
+      dockerfile: MeasurementService/Dockerfile
+    environment:
+      REGION_CODE: "Syddanmark"
+      ConnectionStrings__MeasurementDatabase: "Server=measurement-db-region-syddanmark;Database=MeasurementDb;User Id=sa;Password=SuperSecret7!;Encrypt=false;TrustServerCertificate=True;"
+    deploy:
+      replicas: 2 # X-axis scaling
+    depends_on:
+      - measurement-db-region-syddanmark
+    networks:
+      app-network:
+        aliases:
+          - measurement-service-region-syddanmark
+
+  ## API Gateway
   apigateway:
-    image: apigateway
     build:
       context: .
       dockerfile: APIGateway/Dockerfile
     ports:
       - "5001:8080"
-    deploy:
-      # replicas: 2  # Two replicas for x-axis scaling
-      restart_policy:
-        condition: on-failure
     networks:
       - app-network
+
 networks:
   app-network:
     driver: bridge
-    
-
-
-
-    

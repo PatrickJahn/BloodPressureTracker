@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using MeasurementService.Models;
 using MeasurementService.Services.Interfaces;
 using MeasurementService.DTOs;
 using Microsoft.FeatureManagement;
@@ -7,12 +6,24 @@ using Microsoft.FeatureManagement;
 namespace MeasurementService.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
-    public class MeasurementsController(IMeasurementService measurementService, IFeatureManager featureManager) : ControllerBase
+    [Route("api/[controller]/{regionCode}")]
+    public class MeasurementsController(IMeasurementService measurementService, IFeatureManager featureManager, IConfiguration configuration)
+        : ControllerBase
     {
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Measurement>>> GetMeasurements()
+        private readonly string? _serviceRegion = configuration.GetValue<string>("RegionCode");
+
+        private ActionResult ValidateRegionCode(string regionCode)
         {
+            return !_serviceRegion.Equals(regionCode, StringComparison.OrdinalIgnoreCase) ? BadRequest(new { Message = $"Invalid region code '{regionCode}' for this service." }) : null;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<MeasurementDto>>> GetMeasurements(string regionCode)
+        {
+            var validationResult = ValidateRegionCode(regionCode);
+
+            if (validationResult != null) return validationResult;
+
             if (!await featureManager.IsEnabledAsync("EnableGetAllMeasurements"))
             {
                 return StatusCode(503, "The feature to retrieve all measurements is currently disabled.");
@@ -23,27 +34,35 @@ namespace MeasurementService.Controllers
         }
 
         [HttpGet("{ssn}")]
-        public async Task<ActionResult<IEnumerable<Measurement>>> GetMeasurementsByPatientSSn(string ssn)
+        public async Task<ActionResult<IEnumerable<MeasurementDto>>> GetMeasurementsByPatientSsn(string regionCode, string ssn)
         {
+            var validationResult = ValidateRegionCode(regionCode);
+
+            if (validationResult != null) return validationResult;
+
             if (!await featureManager.IsEnabledAsync("EnableGetMeasurementsBySSN"))
             {
                 return StatusCode(503, "The feature to retrieve measurements by SSN is currently disabled.");
             }
 
-            var measurements = await measurementService.GetMeasurementsBySSn(ssn);
+            var measurements = await measurementService.GetMeasurementsBySSNAsync(ssn);
             return Ok(measurements);
         }
 
-        [HttpPost]
-        public async Task<ActionResult> CreateMeasurement([FromBody] CreateMeasurementDto measurement)
+        [HttpPost("")]
+        public async Task<ActionResult> CreateMeasurement(string regionCode, [FromBody] CreateMeasurementDto measurement)
         {
+            var validationResult = ValidateRegionCode(regionCode);
+
+            if (validationResult != null) return validationResult;
+
             if (!await featureManager.IsEnabledAsync("EnableCreateMeasurement"))
             {
                 return StatusCode(503, "The feature to create a measurement is currently disabled.");
             }
 
             await measurementService.AddMeasurementAsync(measurement);
-            return Ok();
+            return CreatedAtAction(nameof(GetMeasurements), new { regionCode }, measurement);
         }
     }
 }

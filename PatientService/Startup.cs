@@ -1,3 +1,4 @@
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.FeatureManagement;
 using Microsoft.OpenApi.Models;
@@ -25,9 +26,8 @@ namespace PatientService
         
             services.AddDbContext<PatientDbContext>(options =>
                 options.UseSqlServer(connectionString));
-            
+
             services.AddAutoMapper(typeof(PatientMappingProfile));
-            
             services.AddScoped<IPatientRepository, PatientRepository>();
             services.AddScoped<IPatientService, Services.PatientService>();
             services.AddLoggingConfiguration(Configuration);
@@ -37,30 +37,23 @@ namespace PatientService
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Patients API", Version = "v1" });
-            });          }
+            });
+        }
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-      
-            app.UseDeveloperExceptionPage();
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PatientService API v1"));
-           
+
             app.UseMiddleware<ErrorHandler>();
- 
-            using (var scope = app.ApplicationServices.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<PatientDbContext>();
-                try
-                {
-                    dbContext.Database.Migrate(); 
-                    DbSeeder.Seed(dbContext);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error applying database migrations: {ex.Message}");
-                    throw;
-                }
-            }
+
+            ApplyMigrations(app);
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -71,6 +64,28 @@ namespace PatientService
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private void ApplyMigrations(IApplicationBuilder app)
+        {
+            using var scope = app.ApplicationServices.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<PatientDbContext>();
+
+            try
+            {
+                dbContext.Database.Migrate(); 
+                DbSeeder.Seed(dbContext);  
+                Console.WriteLine("Successfully applied migrations and seeded the database.");
+            }
+            catch (SqlException sqlEx)
+            {
+                Console.WriteLine($"SQL error during migration: {sqlEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error applying migrations: {ex.Message}");
+                throw; 
+            }
         }
     }
 }

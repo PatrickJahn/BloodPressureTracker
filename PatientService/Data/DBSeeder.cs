@@ -17,7 +17,8 @@ namespace PatientService.Data
                         Email = "johndoe@example.com",
                         DateOfBirth = new DateTime(1990, 1, 1),
                         Gender = "Male",
-                        MedicalHistory = "No known allergies."
+                        MedicalHistory = "No known allergies.",
+                        RegionCode = "Zealand"
                     },
                     new Patient
                     {
@@ -27,7 +28,8 @@ namespace PatientService.Data
                         Email = "janesmith@example.com",
                         DateOfBirth = new DateTime(1985, 5, 20),
                         Gender = "Female",
-                        MedicalHistory = "Diabetic, requires insulin injections."
+                        MedicalHistory = "Diabetic, requires insulin injections.",
+                        RegionCode = "Midtjylland"
                     }
                 );
                 dbContext.SaveChanges();

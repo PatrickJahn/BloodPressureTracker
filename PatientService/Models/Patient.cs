@@ -7,6 +7,9 @@ namespace PatientService.Models
     {
         [Key]
         public Guid PatientId { get; set; }
+        [MaxLength(20)]
+        public string RegionCode { get; set; }
+        
         [Required]
         public string SSN { get; set; }
         [Required]
