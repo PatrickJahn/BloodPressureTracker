@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using MeasurementService.Data;
 using MeasurementService.Mapper;
@@ -6,7 +7,6 @@ using MeasurementService.Repositories.Interfaces;
 using MeasurementService.Services.Interfaces;
 using Microsoft.FeatureManagement;
 using Microsoft.OpenApi.Models;
-
 
 namespace MeasurementService
 {
@@ -24,34 +24,46 @@ namespace MeasurementService
         
             services.AddDbContext<MeasurementDbContext>(options =>
                 options.UseSqlServer(connectionString));
-            
+
             services.AddAutoMapper(typeof(MappingProfile));
-            
             services.AddScoped<IMeasurementRepository, MeasurementRepository>();
             services.AddScoped<IMeasurementService, Services.MeasurementService>();
-          
             services.AddFeatureManagement();
             services.AddControllers();
             services.AddMvc();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Measurements API", Version = "v1" });
-            });        }
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                if (File.Exists(xmlPath))
+                {
+                    c.IncludeXmlComments(xmlPath);
+                }
+            });
+            
+        }
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-     
-            app.UseDeveloperExceptionPage();
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MeasurementService API v1"));
-
 
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<MeasurementDbContext>();
+
                 try
                 {
-                    dbContext.Database.Migrate(); 
+                    dbContext.Database.Migrate();
                     DBSeeder.Seed(dbContext);
+
+                    Console.WriteLine("Successfully applied migrations and seeded the database.");
                 }
                 catch (Exception ex)
                 {

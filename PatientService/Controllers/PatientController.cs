@@ -9,12 +9,23 @@ using PatientService.Services.Interfaces;
 namespace PatientService.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
-    public class PatientController(IPatientService patientService, IFeatureManager featureManager) : ControllerBase
+    [Route("api/{regionCode}/[controller]")]
+    public class PatientController(IPatientService patientService, IFeatureManager featureManager, IConfiguration configuration)
+        : ControllerBase
     {
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<PatientDto>>> GetAllPatients()
+        private readonly string? _serviceRegion = configuration.GetValue<string>("RegionCode");
+
+        private ActionResult ValidateRegionCode(string regionCode)
         {
+            return !_serviceRegion.Equals(regionCode, StringComparison.OrdinalIgnoreCase) ? BadRequest(new { Message = $"Invalid region code '{regionCode}' for this service." }) : null;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<PatientDto>>> GetAllPatients(string regionCode)
+        {
+            var validationResult = ValidateRegionCode(regionCode);
+            if (validationResult != null) return validationResult;
+
             var parentContext = ActivityHelper.ExtractPropagationContextFromHttpRequest(Request);
             using var activity = LoggingService.activitySource.StartActivity("Get All Patients requested", ActivityKind.Consumer, parentContext.ActivityContext);
             LoggingService.Log.AddContext().Information($"Get all Patients endpoint called");
@@ -34,8 +45,11 @@ namespace PatientService.Controllers
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<ActionResult<PatientDto>> GetPatientById(Guid id)
+        public async Task<ActionResult<PatientDto>> GetPatientById(string regionCode, Guid id)
         {
+            var validationResult = ValidateRegionCode(regionCode);
+            if (validationResult != null) return validationResult;
+
             var parentContext = ActivityHelper.ExtractPropagationContextFromHttpRequest(Request);
             using var activity = LoggingService.activitySource.StartActivity("Get patient by id reuested", ActivityKind.Consumer, parentContext.ActivityContext);
             LoggingService.Log.AddContext().Information($"Get patient by id endpoint called with id: {id.ToString()}");
@@ -62,9 +76,12 @@ namespace PatientService.Controllers
             return Ok(patient);
         }
 
-        [HttpPost]
-        public async Task<ActionResult> CreatePatient([FromBody] CreatePatientDto patientDto)
+        [HttpPost("")]
+        public async Task<ActionResult> CreatePatient(string regionCode, [FromBody] CreatePatientDto patientDto)
         {
+            var validationResult = ValidateRegionCode(regionCode);
+            if (validationResult != null) return validationResult;
+
             var parentContext = ActivityHelper.ExtractPropagationContextFromHttpRequest(Request);
             using var activity = LoggingService.activitySource.StartActivity("Create patient endpoint ", ActivityKind.Consumer, parentContext.ActivityContext);
             LoggingService.Log.AddContext().Information($"Create patient endpoint was called with value: {JsonSerializer.Serialize(patientDto)}");
@@ -87,12 +104,15 @@ namespace PatientService.Controllers
             
             LoggingService.Log.AddContext().Information($"Patient was created successfully");
 
-            return CreatedAtAction(nameof(GetPatientById), new { id = new Guid() }, patientDto);
+            return CreatedAtAction(nameof(GetPatientById), new { regionCode, id = Guid.NewGuid() }, patientDto);
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<ActionResult> UpdatePatient(Guid id, [FromBody] UpdatePatientDto patientDto)
+        public async Task<ActionResult> UpdatePatient(string regionCode, Guid id, [FromBody] UpdatePatientDto patientDto)
         {
+            var validationResult = ValidateRegionCode(regionCode);
+            if (validationResult != null) return validationResult;
+
             if (!await featureManager.IsEnabledAsync("EnableUpdatePatient"))
             {
                 return StatusCode(503, "The feature to update a patient is currently disabled.");
@@ -114,8 +134,11 @@ namespace PatientService.Controllers
         }
 
         [HttpDelete("{id:guid}")]
-        public async Task<ActionResult> DeletePatient(Guid id)
+        public async Task<ActionResult> DeletePatient(string regionCode, Guid id)
         {
+            var validationResult = ValidateRegionCode(regionCode);
+            if (validationResult != null) return validationResult;
+
             if (!await featureManager.IsEnabledAsync("EnableDeletePatient"))
             {
                 return StatusCode(503, "The feature to delete a patient is currently disabled.");

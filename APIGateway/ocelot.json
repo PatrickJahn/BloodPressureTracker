@@ -1,16 +1,19 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/api/Patient",
+      "DownstreamPathTemplate": "/api/{regionCode}/Patient",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
-        {
-          "Host": "patient-service",
-          "Port": 8080
-        }
+        { "Host": "patient-service-region-zealand", "Port": 8080 },
+        { "Host": "patient-service-region-midtjylland", "Port": 8080 },
+        { "Host": "patient-service-region-nordjylland", "Port": 8080 },
+        { "Host": "patient-service-region-syddanmark", "Port": 8080 }
       ],
-      "UpstreamPathTemplate": "/patients",
-      "UpstreamHttpMethod": [ "GET" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "UpstreamPathTemplate": "/{regionCode}/patients",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
       "SwaggerKey": "patients",
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 2,
@@ -18,20 +21,23 @@
         "TimeoutValue": 2000
       },
       "Fallback": {
-        "DownstreamPathTemplate": "/static/fallback/patients"
+        "DownstreamPathTemplate": "/static/fallback/{regionCode}/patients"
       }
     },
     {
-      "DownstreamPathTemplate": "/api/Patient",
+      "DownstreamPathTemplate": "/api/{regionCode}/Patient/{id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
-        {
-          "Host": "patient-service",
-          "Port": 8080
-        }
+        { "Host": "patient-service-region-zealand", "Port": 8080 },
+        { "Host": "patient-service-region-midtjylland", "Port": 8080 },
+        { "Host": "patient-service-region-nordjylland", "Port": 8080 },
+        { "Host": "patient-service-region-syddanmark", "Port": 8080 }
       ],
-      "UpstreamPathTemplate": "/patients",
-      "UpstreamHttpMethod": [ "POST" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "UpstreamPathTemplate": "/{regionCode}/patients/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ],
       "SwaggerKey": "patients",
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 2,
@@ -39,82 +45,46 @@
         "TimeoutValue": 2000
       },
       "Fallback": {
-        "DownstreamPathTemplate": "/static/fallback/patients"
+        "DownstreamPathTemplate": "/static/fallback/{regionCode}/patients/{id}"
       }
     },
     {
-      "DownstreamPathTemplate": "/api/Patient/{id}",
+      "DownstreamPathTemplate": "/api/{regionCode}/Measurements",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
-        {
-          "Host": "patient-service",
-          "Port": 8080
-        }
+        { "Host": "measurement-service-region-zealand", "Port": 8080 },
+        { "Host": "measurement-service-region-midtjylland", "Port": 8080 },
+        { "Host": "measurement-service-region-nordjylland", "Port": 8080 },
+        { "Host": "measurement-service-region-syddanmark", "Port": 8080 }
       ],
-      "UpstreamPathTemplate": "/patients/{id}",
-      "UpstreamHttpMethod": [ "GET" ],
-      "SwaggerKey": "patients",
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "UpstreamPathTemplate": "/{regionCode}/measurements",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "SwaggerKey": "measurements",
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 2,
         "DurationOfBreak": 2000,
         "TimeoutValue": 2000
       },
       "Fallback": {
-        "DownstreamPathTemplate": "/static/fallback/patients/{id}"
+        "DownstreamPathTemplate": "/static/fallback/{regionCode}/measurements"
       }
     },
     {
-      "DownstreamPathTemplate": "/api/Patient/{id}",
+      "DownstreamPathTemplate": "/api/{regionCode}/Measurements/{ssn}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
-        {
-          "Host": "patient-service",
-          "Port": 8080
-        }
+        { "Host": "measurement-service-region-zealand", "Port": 8080 },
+        { "Host": "measurement-service-region-midtjylland", "Port": 8080 },
+        { "Host": "measurement-service-region-nordjylland", "Port": 8080 },
+        { "Host": "measurement-service-region-syddanmark", "Port": 8080 }
       ],
-      "UpstreamPathTemplate": "/patients/{id}",
-      "UpstreamHttpMethod": [ "PUT" ],
-      "SwaggerKey": "patients",
-      "QoSOptions": {
-        "ExceptionsAllowedBeforeBreaking": 2,
-        "DurationOfBreak": 2000,
-        "TimeoutValue": 2000
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
       },
-      "Fallback": {
-        "DownstreamPathTemplate": "/static/fallback/patients/{id}"
-      }
-    },
-    {
-      "DownstreamPathTemplate": "/api/Patient/{id}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "patient-service",
-          "Port": 8080
-        }
-      ],
-      "UpstreamPathTemplate": "/patients/{id}",
-      "UpstreamHttpMethod": [ "DELETE" ],
-      "SwaggerKey": "patients",
-      "QoSOptions": {
-        "ExceptionsAllowedBeforeBreaking": 2,
-        "DurationOfBreak": 2000,
-        "TimeoutValue": 2000
-      },
-      "Fallback": {
-        "DownstreamPathTemplate": "/static/fallback/patients/{id}"
-      }
-    },
-    {
-      "DownstreamPathTemplate": "/api/Measurements",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "measurement-service",
-          "Port": 8080
-        }
-      ],
-      "UpstreamPathTemplate": "/measurements",
+      "UpstreamPathTemplate": "/{regionCode}/measurements/{ssn}",
       "UpstreamHttpMethod": [ "GET" ],
       "SwaggerKey": "measurements",
       "QoSOptions": {
@@ -123,49 +93,7 @@
         "TimeoutValue": 2000
       },
       "Fallback": {
-        "DownstreamPathTemplate": "/static/fallback/measurements"
-      }
-    },
-    {
-      "DownstreamPathTemplate": "/api/Measurements",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "measurement-service",
-          "Port": 8080
-        }
-      ],
-      "UpstreamPathTemplate": "/measurements",
-      "UpstreamHttpMethod": [ "POST" ],
-      "SwaggerKey": "measurements",
-      "QoSOptions": {
-        "ExceptionsAllowedBeforeBreaking": 2,
-        "DurationOfBreak": 2000,
-        "TimeoutValue": 2000
-      },
-      "Fallback": {
-        "DownstreamPathTemplate": "/static/fallback/measurements"
-      }
-    },
-    {
-      "DownstreamPathTemplate": "/api/Measurements/{ssn}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "measurement-service",
-          "Port": 8080
-        }
-      ],
-      "UpstreamPathTemplate": "/measurements/{ssn}",
-      "UpstreamHttpMethod": [ "GET" ],
-      "SwaggerKey": "measurements",
-      "QoSOptions": {
-        "ExceptionsAllowedBeforeBreaking": 2,
-        "DurationOfBreak": 2000,
-        "TimeoutValue": 2000
-      },
-      "Fallback": {
-        "DownstreamPathTemplate": "/static/fallback/measurements/{ssn}"
+        "DownstreamPathTemplate": "/static/fallback/{regionCode}/measurements/{ssn}"
       }
     }
   ],
@@ -174,9 +102,24 @@
       "Key": "patients",
       "Config": [
         {
-          "Name": "Patient Service",
+          "Name": "Patient Service - Zealand",
           "Version": "v1",
-          "Url": "http://patient-service:8080/swagger/v1/swagger.json"
+          "Url": "http://patient-service-region-zealand:8080/swagger/v1/swagger.json"
+        },
+        {
+          "Name": "Patient Service - Midtjylland",
+          "Version": "v1",
+          "Url": "http://patient-service-region-midtjylland:8080/swagger/v1/swagger.json"
+        },
+        {
+          "Name": "Patient Service - Nordjylland",
+          "Version": "v1",
+          "Url": "http://patient-service-region-nordjylland:8080/swagger/v1/swagger.json"
+        },
+        {
+          "Name": "Patient Service - Syddanmark",
+          "Version": "v1",
+          "Url": "http://patient-service-region-syddanmark:8080/swagger/v1/swagger.json"
         }
       ]
     },
@@ -184,9 +127,24 @@
       "Key": "measurements",
       "Config": [
         {
-          "Name": "Measurement Service",
+          "Name": "Measurement Service - Zealand",
           "Version": "v1",
-          "Url": "http://measurement-service:8080/swagger/v1/swagger.json"
+          "Url": "http://measurement-service-region-zealand:8080/swagger/v1/swagger.json"
+        },
+        {
+          "Name": "Measurement Service - Midtjylland",
+          "Version": "v1",
+          "Url": "http://measurement-service-region-midtjylland:8080/swagger/v1/swagger.json"
+        },
+        {
+          "Name": "Measurement Service - Nordjylland",
+          "Version": "v1",
+          "Url": "http://measurement-service-region-nordjylland:8080/swagger/v1/swagger.json"
+        },
+        {
+          "Name": "Measurement Service - Syddanmark",
+          "Version": "v1",
+          "Url": "http://measurement-service-region-syddanmark:8080/swagger/v1/swagger.json"
         }
       ]
     }
@@ -194,23 +152,23 @@
   "GlobalConfiguration": {
     "BaseUrl": "http://localhost:5001",
     "StaticFallback": {
-      "/static/fallback/patients": {
-        "Content": { "Message": "The Patient service is unavailable. Please try again later." },
+      "/static/fallback/{regionCode}/patients": {
+        "Content": { "Message": "The Patient service for region {regionCode} is unavailable. Please try again later." },
         "ContentType": "application/json",
         "StatusCode": 503
       },
-      "/static/fallback/patients/{id}": {
-        "Content": { "Message": "The Patient service is unavailable for Patient ID: {id}. Please try again later." },
+      "/static/fallback/{regionCode}/patients/{id}": {
+        "Content": { "Message": "The Patient service for region {regionCode} is unavailable for Patient ID: {id}. Please try again later." },
         "ContentType": "application/json",
         "StatusCode": 503
       },
-      "/static/fallback/measurements": {
-        "Content": { "Message": "The Measurement service is unavailable. Please try again later." },
+      "/static/fallback/{regionCode}/measurements": {
+        "Content": { "Message": "The Measurement service for region {regionCode} is unavailable. Please try again later." },
         "ContentType": "application/json",
         "StatusCode": 503
       },
-      "/static/fallback/measurements/{ssn}": {
-        "Content": { "Message": "Measurement data is unavailable for SSN: {ssn}. Please try again later." },
+      "/static/fallback/{regionCode}/measurements/{ssn}": {
+        "Content": { "Message": "Measurement data is unavailable for SSN: {ssn} in region {regionCode}. Please try again later." },
         "ContentType": "application/json",
         "StatusCode": 503
       }

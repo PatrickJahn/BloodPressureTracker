@@ -15,36 +15,34 @@ namespace MeasurementService.Repositories
             return await context.Measurements.ToListAsync();
         }
 
-        public async Task<IEnumerable<Measurement?>> GetAllMeasurementsBySSnAsync(string ssn)
+        public async Task<IEnumerable<Measurement?>> GetAllMeasurementsBySSNAsync(string ssn)
         {
             using var activity = LoggingService.activitySource.StartActivity();
-
-            return await context.Measurements.Where(x => x.PatientSSN.Equals(ssn)).ToListAsync();
+            return await context.Measurements.Where(x => x.PatientSSN == ssn).ToListAsync();
         }
 
-        public async Task<Measurement?> GetMeasurementByIdAsync(Guid MeasurementId)
+        public async Task<Measurement?> GetMeasurementByIdAsync(Guid id)
         {
             using var activity = LoggingService.activitySource.StartActivity();
+            return await context.Measurements.FindAsync(id);
 
-            return await context.Measurements.FindAsync(MeasurementId);
         }
 
-        public async Task AddMeasurementAsync(Measurement? Measurement)
+        public async Task AddMeasurementAsync(Measurement? measurement)
         {
             using var activity = LoggingService.activitySource.StartActivity();
+            await context.Measurements.AddAsync(measurement);
 
-            await context.Measurements.AddAsync(Measurement);
             await context.SaveChangesAsync();
         }
 
-        public async Task DeleteMeasurementAsync(Guid MeasurementId)
+        public async Task DeleteMeasurementAsync(Guid id)
         {
             using var activity = LoggingService.activitySource.StartActivity();
-
-            var Measurement = await context.Measurements.FindAsync(MeasurementId);
-            if (Measurement != null)
+            var measurement = await context.Measurements.FindAsync(id);
+            if (measurement != null)
             {
-                context.Measurements.Remove(Measurement);
+                context.Measurements.Remove(measurement);
                 await context.SaveChangesAsync();
             }
         }

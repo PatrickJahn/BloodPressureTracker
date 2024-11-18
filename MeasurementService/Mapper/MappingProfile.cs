@@ -9,7 +9,6 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        // Create mapping configurations here
         CreateMap<Measurement, MeasurementDto>();
         CreateMap<CreateMeasurementDto, Measurement>();
 
