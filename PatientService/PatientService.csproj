@@ -29,4 +29,8 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Monitoring\Monitoring.csproj" />
+    </ItemGroup>
+
 </Project>

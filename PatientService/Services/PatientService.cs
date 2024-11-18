@@ -1,4 +1,5 @@
 using AutoMapper;
+using Monitoring;
 using PatientService.DTOs;
 using PatientService.Models;
 using PatientService.Repositories.Interfaces;
@@ -10,25 +11,31 @@ namespace PatientService.Services
     {
         public async Task<IEnumerable<PatientDto>> GetAllPatientsAsync()
         {
-            var patients = await patientRepository.GetAllPatientsAsync(); 
+            using var activity = LoggingService.activitySource.StartActivity();
+
+            var patients = await patientRepository.GetAllPatientsAsync();
             return mapper.Map<IEnumerable<PatientDto>>(patients);
         }
 
         public async Task<PatientDto> GetPatientByIdAsync(Guid patientId)
         {
+            using var activity = LoggingService.activitySource.StartActivity();
             var patient = await patientRepository.GetPatientByIdAsync(patientId); 
             return patient == null ? null : mapper.Map<PatientDto>(patient);
         }
 
         public async Task AddPatientAsync(CreatePatientDto patientDto)
         {
+            using var activity = LoggingService.activitySource.StartActivity();
+
             var patient = mapper.Map<Patient>(patientDto);
             await patientRepository.AddPatientAsync(patient); 
         }
 
         public async Task UpdatePatientAsync(Guid patientId, UpdatePatientDto patientDto)
         {
-            var patient = await patientRepository.GetPatientByIdAsync(patientId); 
+            using var activity = LoggingService.activitySource.StartActivity();
+            var patient = await patientRepository.GetPatientByIdAsync(patientId);
             if (patient != null)
             {
                 mapper.Map(patientDto, patient); 
@@ -38,7 +45,8 @@ namespace PatientService.Services
 
         public async Task DeletePatientAsync(Guid patientId)
         {
-            await patientRepository.DeletePatientAsync(patientId); 
+            using var activity = LoggingService.activitySource.StartActivity();
+            await patientRepository.DeletePatientAsync(patientId);
         }
     }
 }
