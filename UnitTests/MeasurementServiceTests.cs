@@ -47,7 +47,7 @@ public class MeasurementServiceTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.That(result.Count(), Is.EqualTo(measurements.Count));
+        Assert.Equal(result.Count(), measurements.Count);
         _mockMeasurementRepository.Verify(repo => repo.GetAllMeasurementsAsync(), Times.Once);
     }
     [Fact]
@@ -58,7 +58,7 @@ public class MeasurementServiceTests
             .ReturnsAsync((List<Measurement>)null);
 
         // Act & Assert
-        Assert.ThrowsAsync<ArgumentNullException>(() => _measurementService.GetAllMeasurementsAsync());
+        await Assert.ThrowsAsync<ArgumentNullException>(() => _measurementService.GetAllMeasurementsAsync());
     }
     
     [Fact]
@@ -79,7 +79,7 @@ public class MeasurementServiceTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.That(result.Count(), Is.EqualTo(measurements.Count));
+        Assert.Equal(result.Count(), measurements.Count);
         _mockMeasurementRepository.Verify(repo => repo.GetAllMeasurementsBySSNAsync(ssn), Times.Once);
     }
 
@@ -92,7 +92,7 @@ public class MeasurementServiceTests
             .ReturnsAsync((List<Measurement>)null);
 
         // Act & Assert
-         Assert.ThrowsAsync<ArgumentNullException>(() => _measurementService.GetMeasurementsBySSNAsync(ssn));
+         await Assert.ThrowsAsync<ArgumentNullException>(() => _measurementService.GetMeasurementsBySSNAsync(ssn));
     }
 
     [Fact]
@@ -118,7 +118,7 @@ public class MeasurementServiceTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.That(result.Systolic, Is.EqualTo(measurement.Systolic));
+        Assert.Equal(result.Systolic, measurement.Systolic);
         _mockMeasurementRepository.Verify(repo => repo.GetMeasurementByIdAsync(id), Times.Once);
     }
 
@@ -132,7 +132,7 @@ public class MeasurementServiceTests
             .ReturnsAsync((Measurement)null);
 
         // Act & Assert
-        Assert.ThrowsAsync<KeyNotFoundException>(() => _measurementService.GetMeasurementByIdAsync(id));
+        await Assert.ThrowsAsync<KeyNotFoundException>(() => _measurementService.GetMeasurementByIdAsync(id));
     }
 
     [Fact]

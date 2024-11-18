@@ -60,7 +60,7 @@ public class PatientServiceTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.That(result.Count(), Is.EqualTo(patients.Count));
+        Assert.Equal(result.Count(), patients.Count);
         _mockPatientRepository.Verify(repo => repo.GetAllPatientsAsync(), Times.Once);
     }
     [Fact]
@@ -85,8 +85,8 @@ public class PatientServiceTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.That(result.Name, Is.EqualTo(patient.Name));
-        Assert.That(result.Email, Is.EqualTo(patient.Email));
+        Assert.Equal(result.Name, patient.Name);
+        Assert.Equal(result.Email, patient.Email);
         _mockPatientRepository.Verify(repo => repo.GetPatientByIdAsync(patientId), Times.Once);
     }
 
